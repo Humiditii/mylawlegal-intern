@@ -7,9 +7,13 @@ const baseRoute = Router();
 const productRoutes = Router();
 
 
-productRoutes.post('/signin', Validator.checkEmpty, Validator.checkEmail, AuthController.signin);
+productRoutes.post('/add-product', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.addProduct);
 
-productRoutes.post('/signup', Validator.checkEmpty, Validator.checkEmail, AuthController.signup);
+productRoutes.post('/edit-product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.editProduct );
+
+productRoutes.get('/products', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty,  ProductControllers.getProducts)
+
+productRoutes.delete('/product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.deleteProduct)
 
 baseRoute.use('/product', authRoutes);
 

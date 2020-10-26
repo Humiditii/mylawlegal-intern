@@ -1,4 +1,5 @@
 import Validator from 'validatorjs';
+import Utility from '../Utils/Utility';
 import Utils from '../Utils/Utility';
 
 /**
@@ -58,6 +59,22 @@ class ValidateRequests {
         return Utils.appError(valErr,next)
       });
 
+    }
+
+    static adminRole(req, res, next){
+      const {role} = req;
+
+      if (role == 'User') {
+
+        const roleErr = Object();
+        roleErr.message = 'Not authorized for this operation, admins only!!!';
+        roleErr.statusCode = 401;
+
+        return Utils.appError(roleErr, next);
+
+      } else {
+        return next();
+      }
     }
 
 }
