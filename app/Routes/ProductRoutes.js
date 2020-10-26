@@ -9,7 +9,7 @@ const productRoutes = Router();
 
 productRoutes.post('/add-product', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.addProduct);
 
-productRoutes.post('/edit-product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.editProduct );
+productRoutes.patch('/edit-product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkUpdateParams, ProductControllers.editProduct );
 
 productRoutes.get('/products', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty,  ProductControllers.getProducts)
 

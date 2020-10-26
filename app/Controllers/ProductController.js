@@ -36,10 +36,20 @@ class ProductControllers{
 
     static async editProduct(){
         const {product_id} = req.params;
+        const {productName, productPrice, productQuantity, description, category} = req.body;
+        const {userId} = req;
+
 
         try {
 
-            const updateProduct = await Product.findByIdAndUpdate(product_id, req.body, {
+            const updateProduct = await Product.findByIdAndUpdate(product_id, {
+                name: productName,
+                price: Number(productPrice),
+                quantity: Number(productQuantity),
+                description: description,
+                category: category,
+                admin: userId
+            }, {
                 new: true,
                 runValidators: true
             }).exec();

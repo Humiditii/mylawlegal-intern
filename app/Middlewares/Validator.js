@@ -1,5 +1,4 @@
 import Validator from 'validatorjs';
-import Utility from '../Utils/Utility';
 import Utils from '../Utils/Utility';
 
 /**
@@ -42,6 +41,27 @@ class ValidateRequests {
         return next()
       }
 
+    }
+
+    static checkUpdateParams(req, res, next){
+      const params = {
+        name: 'required',
+        price: 'required',
+        quantity: 'required',
+        description: 'required',
+        category: 'required',
+      }
+
+      const validator = new Validator(req.body, params);
+      validator.passes( () => next() );
+
+      validator.fails( () => {
+        const errors = validator.errors.all();
+        const valErr = {}
+        valErr.message = errors;
+        valErr.statusCode = 400;
+        return Utils.appError(valErr,next)
+      });
     }
 
     static checkEmail(req, res, next){
