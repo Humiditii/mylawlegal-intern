@@ -97,10 +97,11 @@ class Utility {
      * @param {Object} responseData 
      * @return {Object}
      */
-    static api_response(responseObject, statusCode, response_msg, responseData=null ){
+    static api_response(responseObject, statusCode, response_msg,token=null, responseData=null ){
         return responseObject.status(statusCode).json({
             message: response_msg,
-            data: responseData
+            data: responseData,
+            token: token
         });
     }
 
