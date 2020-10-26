@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import authRoute from './app/Routes/AuthRoutes';
+import productRoute from './app/Routes/ProductRoutes'; 
 
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(cors());
 //Application routes
 
 app.use('/api/v1/', authRoute);
+app.use('/api/v1/',productRoute);
 
 //routes ends here
 app.use('/', (req, res)=> {
@@ -56,7 +58,7 @@ app.all( '*',(req, res, next)=> {
 
 //Handling errors 
 app.use((error, req, res, next) => {
-    console.log(error);
+    // console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
 

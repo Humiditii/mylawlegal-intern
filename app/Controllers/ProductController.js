@@ -2,13 +2,14 @@ import Product from '../Models/Product';
 import Utils from '../Utils/Utility';
 
 class ProductControllers{
-    static async addProduct(){
+    static async addProduct(req, res, next){
         const {productName, productPrice, productQuantity, description, category} = req.body;
 
         const {userId} = req;
 
         try {
-            const checkExistence = await Product.find({productName})
+            const checkExistence = await Product.find({name:productName})
+            
             if(checkExistence.length > 0 ){
                 return Utils.api_response(res, 400, 'Product name already exist😫')
             }else{
@@ -18,12 +19,13 @@ class ProductControllers{
                     quantity: Number(productQuantity),
                     description: description,
                     category: category,
-                    admin: userId
+                    admin:
+                     userId
                 })
 
-                newProduct.save( saveProduct => {
+                newProduct.save().then( saveProduct => {
                     return Utils.api_response(res,201, 'New product created successfully 👍', null, saveProduct);
-                } ).catch(err => {
+                }).catch(err => {
                     return Utils.appError(err, next);
                 })
             }
@@ -34,7 +36,7 @@ class ProductControllers{
 
     }
 
-    static async editProduct(){
+    static async editProduct(req, res, next){
         const {product_id} = req.params;
         const {productName, productPrice, productQuantity, description, category} = req.body;
         const {userId} = req;
@@ -59,17 +61,29 @@ class ProductControllers{
         }
     }
 
-    static async getProducts(){
+    static async getProducts(req, res, next){
+        /**
+         * Implementing Pagination 
+         */
+        const PAGE_SIZE = 10;
 
         const {userId} = req;
+        const {category, page} = req.query;
+
+        const page_count = !page ? 1 : page
+      
+        const skipper = ( page_count - 1 ) * PAGE_SIZE;
 
         try {
-            const findAdmin = await Product.find({admin:userId}).exec();
 
-            if(findAdmin.length == 0){
+            const products = category ?  
+            await Product.find({admin:userId, category: category}).skip(skipper).limit(PAGE_SIZE).exec(): 
+            await Product.find({admin:userId}).exec();
+
+            if(products.length == 0){
                 return Utils.api_response(res, 404, 'You do not have any product yet 😔!!!')
             }else{
-                return Utils.api_response(res, 200, 'list of your products', null, findAdmin)
+                return Utils.api_response(res, 200, 'list of your products', null, products)
             }
 
         } catch (error) {
@@ -77,7 +91,7 @@ class ProductControllers{
         }
     }
 
-    static async deleteProduct(){
+    static async deleteProduct(req, res, next){
         const { product_id } = req.params;
         try {
             const deleteP = await Product.findByIdAndDelete(product_id).exec();
@@ -85,6 +99,20 @@ class ProductControllers{
         } catch (error) {
             return Utils.appError(error, next)
         }
+    }
+
+    static async getCategories(req, res, next){
+        const {userId} = req;
+
+        try {
+            const categories = await Product.find({admin:userId}).select('category').exec();
+
+            return Utils.api_response(res, 200, 'Categories available', null, categories)
+        } catch (error) {
+            return Utils.appError(error, next)
+        }
+       
+
     }
 }
 

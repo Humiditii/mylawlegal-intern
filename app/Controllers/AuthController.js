@@ -82,7 +82,7 @@ class AuthController{
                     }
                     const token = Utils.generateToken(user_data)
             
-                    const msg = `${findUser.firstname} logged in`;
+                    const msg = `${findAccount.firstname} logged in`;
 
                     return Utils.api_response(res, 200, msg, token);
                 }else{

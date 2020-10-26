@@ -9,7 +9,7 @@ const authRoutes = Router();
 
 authRoutes.post('/signin', Validator.checkEmpty, Validator.checkEmail, AuthController.signin);
 
-authRoutes.post('/signup', Validator.checkEmpty, Validator.checkEmail, AuthController.signup);
+authRoutes.post('/signup', Validator.checkEmpty, AuthController.signup);
 
 baseRoute.use('/auth', authRoutes);
 
