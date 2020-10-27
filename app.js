@@ -376,7 +376,6 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *          type: String
  *      - in: formData
 *        name: category
-*        required: true
 *        description: Product category
 *        schema:
 *          type: String
