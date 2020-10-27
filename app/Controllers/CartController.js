@@ -102,19 +102,19 @@ class CartController{
                 charge_cart.orderStatus = 'approved';
                 const items = charge_cart.cartItems.map( item => item.productId )
 
-                items.foreach( item => {
-                    try {
-                        const getProducts = await Product.findById(item.productId).exec();
+                // items.map( item => {
+                //     try {
+                //         const getProducts = await Product.findById(item.productId).exec();
 
-                        getProducts.quantity -=  item.quantity;
+                //         getProducts.quantity -=  item.quantity;
 
-                        const update = await getProducts.save();
-                        return Utils.api_response(res, 200, 'Purchased', null, charge_msg );
-                    } catch (error) {
-                        return Utils.appError(error, next)
-                    }
+                //         const update = await getProducts.save();
+                //         return Utils.api_response(res, 200, 'Purchased', null, charge_msg );
+                //     } catch (error) {
+                //         return Utils.appError(error, next)
+                //     }
 
-                })
+                // })
 
             }
             
@@ -123,7 +123,7 @@ class CartController{
         }
     }
 
-    static removeFromCart(req, res, next){
+    static async removeFromCart(req, res, next){
         const { product_id } = req.params;
         const {userId} = req;
         try {
@@ -151,7 +151,7 @@ class CartController{
         const {userId} = req;
 
        
-        const {category, page} = req.query;
+        const {page} = req.query;
 
         const page_count = !page ? 1 : page
       

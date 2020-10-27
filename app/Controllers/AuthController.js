@@ -10,6 +10,8 @@ class AuthController{
 
         const { firstname, lastname, email,role,street,state,localgovt, phone,  password } = req.body;
 
+        console.log(req.body)
+
         const combinename = firstname+lastname
 
         try {

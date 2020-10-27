@@ -5,6 +5,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import authRoute from './app/Routes/AuthRoutes';
 import productRoute from './app/Routes/ProductRoutes'; 
+import cartRoutes from './app/Routes/CartRoutes';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 
@@ -33,7 +34,7 @@ process.env.NODE_ENV == 'development' ? ( connection_config.port = 3333 , connec
 
 
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 
 // application/json parsing json incoming request
@@ -50,71 +51,325 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 
 //Application routes
+
+
 /**
  * @swagger
  * /api/v1/auth/signup:
  *  post:
- *      description: sign up new user either as an admin or a normal user
+ *      summary: sign up new user either as an admin or a normal
  *      parameters:
- *      - name: firstname
- *        description: First name of the user
- *        in: formData
+ *      - in: formData
+ *        name: firstname
  *        required: true
- *        type: String
- *      - name: lastname
- *        description: Last name of the user
- *        in: formData
+ *        description: User first name
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: lastname
  *        required: true
- *        type: String
- *      - name: email
- *        description: A valid email address
- *        in: formData
+ *        description: User first lastname
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: email
  *        required: true
- *        type: String
- *      - name: role
- *        description: Role of the account user, default value is User if nothing is passed
- *        in: formData
- *        type: String
- *      - name: street
- *        description: Streed adress of the residence
- *        in: formData
+ *        description: User email
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: role
+ *        description: account role, default is User if nothing is passed
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: street
  *        required: true
- *        type: String
- *      - name: state
- *        description: State of residence
- *        in: formData
+ *        description: Residence street
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: state
  *        required: true
- *        type: String
- *      - name: localgovt 
- *        description: localgovt of residence
- *        in: formData
+ *        description: Residence state
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: localgovt
  *        required: true
- *        type: String
- *      - name: phone
- *        description: Mobile phone number
- *        in: formData
+ *        description: Residence localgovernment
+ *        schema:
+ *          type: String
+ *      - in: formData
+ *        name: phone
  *        required: true
- *        type: Number
- *      - name: password
+ *        description: User phone
+ *        schema:
+ *          type: integer
+ *      - in: formData
+ *        name: password
+ *        required: true
  *        description: Account password
- *        in: formData
- *        required: true
- *        type: String
+ *        schema:
+ *          type: String
  *      responses:
  *          201:
  *              description: Success
  */
+    
 /**
  * @swagger
  * /api/v1/auth/signin:
  *  post:
- *      description: sign up new
+ *      summary: Authorize a user with correct details
+ *      parameters:
+ *      - in: formData
+ *        name: email
+ *        required: true
+ *        description: User email
+ *        schema:
+ *          type: String
+ *      
+ *      - in: formData
+ *        name: password
+ *        required: true
+ *        description: Account password
+ *        schema:
+ *          type: String
+ *      responses:
+ *          200:
+ *              description: Success
+ */
+/**
+ * @swagger
+ * /api/v1/cart/my_cart:
+ *  get:
+ *      summary: Get the list of items in a user's cart, for authorized user
+ *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          200:
+ *              description: Cart lists
+ */
+
+/**
+ * @swagger
+ * /api/v1/cart/move_to_cart/{item_id}:
+ *  post:
+ *      summary: Select a product from store and add it to your cart
+ *      parameters:
+ *      - in: path
+ *        name: item_id
+ *        required: true
+ *        description: Item id
+ *        schema:
+ *          type: String
+ * 
  *      responses:
  *          201:
  *              description: Success
  */
+
+/**
+* @swagger
+* /api/v1/cart/purchase:
+*  post:
+*      summary: Simulating payment to purchase, though 3rd party library to be used like Paystack,paypal or stripe not used
+*      parameters:
+*      - in: path
+*        name: cardNumber
+*        required: true
+*        description: Card number
+*        schema:
+*          type: integer
+*      - in: path
+*        name: ccv
+*        required: true
+*        description: ccv
+*        schema:
+*          type: integer
+*      - in: path
+*        name: expiryDate
+*        required: true
+*        description: Expiry date
+*        schema:
+*          type: integer
+*      - in: path
+*        name: pin
+*        required: true
+*        description: card pin
+*        schema:
+*          type: integer
+*      responses:
+*          201:
+*              description: Success
+*/
+
+/**
+ * @swagger
+ * /api/v1/cart/purchase/details:
+ *  get:
+ *      summary: Get the details of sold goods (Administrator access only)
+ *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          200:
+ *              description: Sold details
+ */
+/**
+ * @swagger
+ * /api/v1/cart/delete/{product_id}:
+ *  delete:
+ *      summary: Delete item from cart
+ *      parameters:
+ *      - in: path
+ *        name: product_id
+ *        required: true
+ *        description: product id
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          201:
+ *              description: Success
+ */
+
+ /**
+* @swagger
+* /api/v1/product/add-product:
+*  post:
+*      summary: Admins add new product to ther store and the categories which they belong (Administrative access only) 
+*      parameters:
+*      - in: formData
+*        name: productName
+*        required: true
+*        description: Name of the product to be added
+*        schema:
+*          type: String
+*      - in: formData
+*        name: productPrice
+*        required: true
+*        description: Unit price of the product
+*        schema:
+*          type: integer
+*      - in: formData
+*        name: productQuantity
+*        required: true
+*        description: Quantity of the product being added
+*        schema:
+*          type: integer
+*      - in: formData
+*        name: description
+*        required: true
+*        description: Product description
+*        schema:
+*          type: String
+*      - in: formData
+*        name: category
+*        required: true
+*        description: Product category
+*        schema:
+*          type: String
+*      responses:
+*          201:
+*              description: Success
+*/
+
+/**
+ * @swagger
+ * /api/v1/product/edit-product/{product_id}:
+ *  patch:
+ *      summary: Edit a product (Administrative access only)
+ *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ *      - in: path
+ *        name: product_id
+ *        required: true
+ *        description: Product id
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          200:
+ *              description: Cart lists
+ */
+
+/**
+ * @swagger
+ * /api/v1/product/categories:
+ *  get:
+ *      summary: Get all categories of product available
+ *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          200:
+ *              description: Sold details
+ */
+
+ /**
+ * @swagger
+ * /api/v1/product/products:
+ *  get:
+ *      summary: Get all products (paginated)
+ *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          200:
+ *              description: Sold details
+ */
+
+ /**
+ * @swagger
+ * /api/v1/product/delete/{product_id}:
+ *  delete:
+ *      summary: Delete a product (Administrative access required)
+ *      parameters:
+ *      - in: path
+ *        name: product_id
+ *        required: true
+ *        description: product id
+ *        schema:
+ *          type: String
+ * 
+ *      responses:
+ *          201:
+ *              description: Success
+ */
+ 
+ 
+
 app.use('/api/v1/', authRoute);
 app.use('/api/v1/',productRoute);
+app.use('/api/v1/', cartRoutes);
 
 //routes ends here
 app.use('/', (req, res)=> {
@@ -136,7 +391,7 @@ app.all( '*',(req, res, next)=> {
 
 //Handling errors 
 app.use((error, req, res, next) => {
-    // console.log(error);
+    //console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
 

@@ -11,9 +11,9 @@ productRoutes.post('/add-product', IsAuth.verifyAuth, Validator.adminRole, Valid
 
 productRoutes.patch('/edit-product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkUpdateParams, ProductControllers.editProduct );
 
-productRoutes.get('/products', IsAuth.verifyAuth, Validator.checkEmpty,  ProductControllers.getProducts)
+productRoutes.get('/products', IsAuth.verifyAuth,  ProductControllers.getProducts)
 
-productRoutes.delete('/product/:product_id', IsAuth.verifyAuth, Validator.adminRole, Validator.checkEmpty, ProductControllers.deleteProduct)
+productRoutes.delete('/delete/:product_id', IsAuth.verifyAuth, Validator.adminRole, ProductControllers.deleteProduct)
 
 productRoutes.get('/categories', IsAuth.verifyAuth, ProductControllers.getCategories)
 
