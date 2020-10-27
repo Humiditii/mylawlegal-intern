@@ -6,7 +6,6 @@ import IsAuth from '../Middlewares/IsAuth';
 const baseRoute = Router();
 const authRoutes = Router();
 
-
 authRoutes.post('/signin', Validator.checkEmpty, Validator.checkEmail, AuthController.signin);
 
 authRoutes.post('/signup', Validator.checkEmpty, AuthController.signup);

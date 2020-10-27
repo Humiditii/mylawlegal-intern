@@ -4,13 +4,8 @@ import Auth from '../Models/Auth';
 
 
 class AuthController{
-   /**
-     * This method helps to signup new users
-     * @param {Object} req 
-     * @param {Object} res 
-     * @param {Object} next
-     * @returns {Object} 
-     */
+  
+    
     static async signup(req, res, next){
 
         const { firstname, lastname, email,role,street,state,localgovt, phone,  password } = req.body;

@@ -4,7 +4,6 @@ import Utils from '../Utils/Utility';
 class ProductControllers{
     static async addProduct(req, res, next){
         const {productName, productPrice, productQuantity, description, category} = req.body;
-
         const {userId} = req;
 
         try {
@@ -62,9 +61,11 @@ class ProductControllers{
     }
 
     static async getProducts(req, res, next){
+           
         /**
          * Implementing Pagination 
          */
+
         const PAGE_SIZE = 10;
 
         const {userId} = req;
@@ -73,6 +74,7 @@ class ProductControllers{
         const page_count = !page ? 1 : page
       
         const skipper = ( page_count - 1 ) * PAGE_SIZE;
+        
 
         try {
 
@@ -111,8 +113,6 @@ class ProductControllers{
         } catch (error) {
             return Utils.appError(error, next)
         }
-       
-
     }
 }
 
