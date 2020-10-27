@@ -67,7 +67,7 @@ class CartController{
 
     
     static async getCart(req, res, next){
-        console.log('dede')
+       
         
         const {userId} = req;
         const {page} = req.query;
@@ -80,9 +80,9 @@ class CartController{
 
         try {
 
-            const {cartItems} = await Cart.findOne({owner: userId, orderStatus:'pending' }).exec();
+            const findCart = await Cart.findOne({owner: userId, orderStatus:'pending' }).exec();
 
-            const response = !cartItems ?'Empty Cart':cartItems.slice(SKIPPER, PAGE_TRACK * PER_PAGE);
+            const response = !findCart ?'Empty Cart':findCart.cartItems.slice(SKIPPER, PAGE_TRACK * PER_PAGE);
 
             return Utils.api_response(res, 200, `Your carts on page ${PAGE_TRACK}`, null, response)
             
