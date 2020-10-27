@@ -146,6 +146,11 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *  get:
  *      summary: Get the list of items in a user's cart, for authorized user
  *      parameters:
+ *      - in: query
+ *        name: page
+ *        description: page number
+ *        schema:
+ *          type: integer
  *      - in: header
  *        name: Authorization
  *        required: true
@@ -164,7 +169,13 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *  post:
  *      summary: Select a product from store and add it to your cart
  *      parameters:
- *      - in: path
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
+ *      - in: formData
  *        name: item_id
  *        required: true
  *        description: Item id
@@ -182,6 +193,12 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 *  post:
 *      summary: Simulating payment to purchase, though 3rd party library to be used like Paystack,paypal or stripe not used
 *      parameters:
+*      - in: header
+*        name: Authorization
+*        required: true
+*        description: An authorization jwt token
+*        schema:
+*          type: String
 *      - in: path
 *        name: cardNumber
 *        required: true
@@ -217,6 +234,11 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *  get:
  *      summary: Get the details of sold goods (Administrator access only)
  *      parameters:
+ *      - in: query
+ *        name: page
+ *        description: page number
+ *        schema:
+ *          type: integer
  *      - in: header
  *        name: Authorization
  *        required: true
@@ -256,6 +278,12 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 *        name: productName
 *        required: true
 *        description: Name of the product to be added
+*        schema:
+*          type: String
+*      - in: header
+*        name: Authorization
+*        required: true
+*        description: An authorization jwt token
 *        schema:
 *          type: String
 *      - in: formData
@@ -335,12 +363,23 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *  get:
  *      summary: Get all products (paginated)
  *      parameters:
+ *      - in: query
+ *        name: page
+ *        description: page number
+ *        schema:
+ *          type: integer
  *      - in: header
  *        name: Authorization
  *        required: true
  *        description: An authorization jwt token
  *        schema:
  *          type: String
+ *      - in: formData
+*        name: category
+*        required: true
+*        description: Product category
+*        schema:
+*          type: String
  * 
  *      responses:
  *          200:
@@ -353,6 +392,12 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *  delete:
  *      summary: Delete a product (Administrative access required)
  *      parameters:
+ *      - in: header
+ *        name: Authorization
+ *        required: true
+ *        description: An authorization jwt token
+ *        schema:
+ *          type: String
  *      - in: path
  *        name: product_id
  *        required: true

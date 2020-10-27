@@ -68,9 +68,8 @@ class CartController{
     
     static async getCart(req, res, next){
        
-        
         const {userId} = req;
-        const {page} = req.query;
+        const {page} = parseInt(req.query);
 
         const PER_PAGE = 5;
 
@@ -160,7 +159,7 @@ class CartController{
         const {userId} = req;
 
        
-        const {page} = req.query;
+        const {page} = parseInt(req.query);
 
         const page_count = !page ? 1 : page
       
