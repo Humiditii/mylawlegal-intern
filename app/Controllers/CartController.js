@@ -108,22 +108,22 @@ class CartController{
                 const charge_msg = `${cardNumber} charged`
 
                 charge_cart.orderStatus = 'approved';
-                const items = charge_cart.cartItems.map( item => item.productId )
+                const items = charge_cart.cartItems.map( item => item.productId );
 
-                // items.map( item => {
-                //     try {
-                //         const getProducts = await Product.findById(item.productId).exec();
+                for (const item of items) {
+                    try {
+                        const getProducts = await Product.findById(item.productId).exec();
 
-                //         getProducts.quantity -=  item.quantity;
+                        getProducts.quantity -=  item.quantity;
 
-                //         const update = await getProducts.save();
-                //         return Utils.api_response(res, 200, 'Purchased', null, charge_msg );
-                //     } catch (error) {
-                //         return Utils.appError(error, next)
-                //     }
+                        const update = await getProducts.save();
 
-                // })
+                    } catch (error) {
+                        return Utils.appError(error, next)
+                    }
+                }
 
+                return Utils.api_response(res, 200, 'Purchased', null, charge_msg );
             }
             
         } catch (error) {

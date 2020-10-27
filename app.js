@@ -319,7 +319,7 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  * @swagger
  * /api/v1/product/edit-product/{product_id}:
  *  patch:
- *      summary: Edit a product (Administrative access only)
+ *      summary: Edit a product, default values are returned from the front-end to the form, so the required field could be changed (Administrative access only)
  *      parameters:
  *      - in: header
  *        name: Authorization
@@ -333,6 +333,42 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
  *        description: Product id
  *        schema:
  *          type: String
+ *      - in: formData
+*        name: productName
+*        required: true
+*        description: Name of the product to be added
+*        schema:
+*          type: String
+*      - in: header
+*        name: Authorization
+*        required: true
+*        description: An authorization jwt token
+*        schema:
+*          type: String
+*      - in: formData
+*        name: productPrice
+*        required: true
+*        description: Unit price of the product
+*        schema:
+*          type: integer
+*      - in: formData
+*        name: productQuantity
+*        required: true
+*        description: Quantity of the product being added
+*        schema:
+*          type: integer
+*      - in: formData
+*        name: description
+*        required: true
+*        description: Product description
+*        schema:
+*          type: String
+*      - in: formData
+*        name: category
+*        required: true
+*        description: Product category
+*        schema:
+*          type: String
  * 
  *      responses:
  *          200:

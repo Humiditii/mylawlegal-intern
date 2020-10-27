@@ -19,7 +19,9 @@ const productSchema = new Schema({
     },
     category: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true,
+        trim: true
     },
     admin : {
         required: true,
